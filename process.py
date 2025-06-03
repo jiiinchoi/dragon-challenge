@@ -18,7 +18,7 @@ class DragonSubmission(DragonBaseline):
         self.gradient_checkpointing = False
         self.max_seq_length = 512
         self.learning_rate = 1e-05
-        self.num_train_epochs = 5
+        self.num_train_epochs = 7
 
     def custom_text_cleaning(self, text: Union[str, List[str]]) -> Union[str, List[str]]:
         """
@@ -48,12 +48,20 @@ class DragonSubmission(DragonBaseline):
 
 
 
-\
-    fdg
-        # Uncomment the following lines to use the custom_text_cleaning function
-        # for df in [self.df_train, self.df_val, self.df_test]:
-        #     df[self.task.input_name] = df[self.task.input_name].map(self.custom_text_cleaning)
 
 
 if __name__ == "__main__":
-    DragonSubmission().process()
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", "-i", required=True)
+    parser.add_argument("--output", "-o", required=True)
+    parser.add_argument("--workdir", "-w", default="test-workdir")
+    args = parser.parse_args()
+
+    DragonSubmission(
+        input_path=Path(args.input),
+        output_path=Path(args.output),
+        workdir=Path(args.workdir)
+    ).process()
